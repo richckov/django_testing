@@ -14,8 +14,6 @@ ADMIN: str = lazy_fixture('admin_client')
 ANON = lazy_fixture('client')
 ID: int = 1
 QUANTITY_TEST: int = 5
-COMMENT_TEXT: str = 'Текст комментария'
-NEW_COMMENT: str = 'Обновленный текст комментария'
 
 
 URL_NAMES: any = namedtuple(

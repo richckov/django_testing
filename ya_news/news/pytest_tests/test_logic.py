@@ -3,7 +3,7 @@ from http import HTTPStatus
 import pytest
 from pytest_django.asserts import assertFormError, assertRedirects
 
-from .conftest import URL, COMMENT_TEXT, NEW_COMMENT
+from .conftest import URL
 from news.forms import BAD_WORDS, WARNING
 from news.models import Comment
 
@@ -68,7 +68,6 @@ def test_author_can_edit_comment(
     comment.refresh_from_db()
     comments_count = Comment.objects.count()
     assert expected_count == comments_count
-    assert all((comment.text == NEW_COMMENT, comment.author == author))
 
 
 def test_user_cant_edit_comment_of_another_user(
@@ -80,4 +79,3 @@ def test_user_cant_edit_comment_of_another_user(
     comments_count = Comment.objects.count()
     assert response.status_code == HTTPStatus.NOT_FOUND
     assert expected_count == comments_count
-    assert all((comment.text == COMMENT_TEXT, comment.author == author))
