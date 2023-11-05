@@ -45,6 +45,7 @@ def test_user_cant_use_bad_words(author_login, news, word):
 
 
 def test_author_delete_comment(author_login, comment):
+    """Автор комментария может удалять комментарий."""
     expected_count = Comment.objects.count() - 1
     try:
         response = author_login.delete(URL.delete)
