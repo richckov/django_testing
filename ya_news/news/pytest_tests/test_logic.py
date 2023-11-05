@@ -2,7 +2,6 @@ from http import HTTPStatus
 
 import pytest
 from pytest_django.asserts import assertFormError, assertRedirects
-from django.urls import reverse
 
 from .conftest import URL
 from news.forms import BAD_WORDS, WARNING
@@ -45,11 +44,6 @@ def test_user_cant_use_bad_words(author_login, news, word):
 
 def test_author_delete_comment(author_login, comment):
     """Автор комментария может удалять комментарий."""
-    # expected_count = Comment.objects.count() - 1
-    # response = author_login.delete(URL.delete)
-    # comments_count = Comment.objects.count()
-    # assertRedirects(response, f'{URL.detail}#comments')
-    # assert expected_count == comments_count
     response = author_login.post(URL.delete)
     assertRedirects(response, f'{URL.detail}#comments')
     comment_count = Comment.objects.count()
