@@ -51,25 +51,8 @@ def test_author_delete_comment(author_login, comment):
         comments_count = Comment.objects.count()
         assertRedirects(response, f'{URL.detail}#comments')
         assert expected_count == comments_count
-    except comments_count == expected_count:
+    except comments_count != expected_count:
         print("Ошибка при удалении комментария")
-
-# def test_author_delete_comment(author_login, comment):
-#     сomment_count= Comment.objects.count()
-#     expected_count = сomment_count - 1
-#     response = author_login.delete(URL.delete)
-#     try:
-
-#     except assertRedirects(response, f'{URL.detail}#comments'):
-        # assert expected_count == comments_count
-# def test_author_delete_comment(author_login, comment):
-#     """Автор комментария может удалять комментарий."""
-#     comment_count = Comment.objects.count()
-#     try:
-#         response = author_login.get(URL.delete)
-
-#     except comment_count != comment_count:
-#         assert response.status_code == HTTPStatus.OK
 
 
 def test_user_cant_delete_comment_of_another_user(admin_client, comment):
