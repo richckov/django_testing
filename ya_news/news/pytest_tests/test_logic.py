@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 import pytest
 from pytest_django.asserts import assertFormError, assertRedirects
+from django.urls import reverse
 
 from .conftest import URL
 from news.forms import BAD_WORDS, WARNING
@@ -11,6 +12,7 @@ pytestmark = pytest.mark.django_db
 
 
 def test_anonymous_user_cant_create_comment(client, news, form_text):
+    """Анонимный пользователь не может создавать комментарий."""
     expected_count = Comment.objects.count()
     client.post(URL.detail, data=form_text)
     comments_count = Comment.objects.count()
@@ -18,6 +20,7 @@ def test_anonymous_user_cant_create_comment(client, news, form_text):
 
 
 def test_user_can_create_comment(author_login, author, news, form_text):
+    """Авторизированный пользователь может создавать комментарий."""
     expected_count = Comment.objects.count() + 1
     response = author_login.post(URL.detail, data=form_text)
     comments_count = Comment.objects.count()
@@ -31,6 +34,7 @@ def test_user_can_create_comment(author_login, author, news, form_text):
 
 @pytest.mark.parametrize('word', BAD_WORDS)
 def test_user_cant_use_bad_words(author_login, news, word):
+    """Проверка на плохие слова."""
     expected_count = Comment.objects.count()
     bad_words_data = {'text': f'Какой-то текст, {word}, еще текст'}
     response = author_login.post(URL.detail, data=bad_words_data)
@@ -40,13 +44,20 @@ def test_user_cant_use_bad_words(author_login, news, word):
 
 
 def test_author_delete_comment(author_login, comment):
+    """Автор комментария может удалять комментарий."""
+    # expected_count = Comment.objects.count() - 1
+    # response = author_login.delete(URL.delete)
+    # comments_count = Comment.objects.count()
+    # assertRedirects(response, f'{URL.detail}#comments')
+    # assert expected_count == comments_count
     response = author_login.post(URL.delete)
-    comments_count = Comment.objects.count()
     assertRedirects(response, f'{URL.detail}#comments')
-    assert comments_count == 0
+    comment_count = Comment.objects.count()
+    assert comment_count == 0
 
 
 def test_user_cant_delete_comment_of_another_user(admin_client, comment):
+    """Другой пользователь не может удалятб комментарий."""
     expected_count = Comment.objects.count()
     response = admin_client.delete(URL.delete)
     comments_count = Comment.objects.count()
@@ -57,6 +68,7 @@ def test_user_cant_delete_comment_of_another_user(admin_client, comment):
 def test_author_can_edit_comment(
     author, author_login, comment, form_text
 ):
+    """Автор может редактировать комментарий."""
     expected_count = Comment.objects.count()
     response = author_login.post(URL.edit, data=form_text)
     assertRedirects(response, f'{URL.detail}#comments')
@@ -68,6 +80,7 @@ def test_author_can_edit_comment(
 def test_user_cant_edit_comment_of_another_user(
     author, admin_client, comment, form_text
 ):
+    """Другой пользовтаель не может редактировать комментарий."""
     expected_count = Comment.objects.count()
     response = admin_client.post(URL.edit, data=form_text)
     comment.refresh_from_db()

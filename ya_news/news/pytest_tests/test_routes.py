@@ -26,6 +26,7 @@ pytestmark = pytest.mark.django_db
 def test_pages_availability(
         url, param_client, expected_status, comment
 ):
+    """Проверка на доступ к страницам."""
     response = param_client.get(url)
     assert expected_status == response.status_code
 
@@ -35,6 +36,7 @@ def test_pages_availability(
     (URL.edit, URL.delete),
 )
 def test_redirect_for_anonymous(client, url):
+    """Проверка редиректов анонимного пользователя на страницу логина."""
     expected_url = f'{URL.login}?next={url}'
     response = client.get(url)
     assertRedirects(response, expected_url)

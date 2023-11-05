@@ -42,23 +42,27 @@ URL: tuple = URL_NAMES(
 
 @pytest.fixture
 def author(django_user_model):
+    """Автор."""
     return django_user_model.objects.create(username='Автор')
 
 
 @pytest.fixture
 def author_login(author, client):
+    """Залогиненный автор."""
     client.force_login(author)
     return client
 
 
 @pytest.fixture
 def news():
+    """Новость."""
     news = News.objects.create(title='Заголовок', text='Текст')
     return news
 
 
 @pytest.fixture
 def all_news():
+    """Все новости."""
     all_news = News.objects.bulk_create(
         News(
             title=f'Заголовок {i}',
@@ -72,6 +76,7 @@ def all_news():
 
 @pytest.fixture
 def comment(news, author):
+    """Комменатрий."""
     comment = Comment.objects.create(
         news=news,
         author=author,
@@ -82,19 +87,21 @@ def comment(news, author):
 
 @pytest.fixture
 def all_comments(news, author):
+    """Все комментарии."""
     for i in range(QUANTITY_TEST):
-        comment_list = Comment.objects.create(
+        craete_comment = Comment.objects.create(
             news=news,
             author=author,
             text=f'Комменатрий {i}'
         )
-        comment_list.created = timezone.now() + timedelta(days=i)
-        comment_list.save()
-    return comment_list
+        craete_comment.created = timezone.now() + timedelta(days=i)
+        craete_comment.save()
+    return craete_comment
 
 
 @pytest.fixture
 def form_text():
+    """Текст формы"""
     return {
         'text': 'Новый текст комментария',
     }

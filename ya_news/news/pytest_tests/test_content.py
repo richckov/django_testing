@@ -8,6 +8,7 @@ pytestmark = pytest.mark.django_db
 
 
 def test_news_order_and_count(client, all_news):
+    """Сортировка и подсчет новостей."""
     response = client.get(URL.homepage)
     object_list = list(response.context['object_list'])
     assert len(object_list) == settings.NEWS_COUNT_ON_HOME_PAGE
@@ -17,6 +18,7 @@ def test_news_order_and_count(client, all_news):
 
 
 def test_comment_order(client, news, all_comments):
+    """Сортировка комментариев."""
     response = client.get(URL.detail)
     assert 'news' in response.context
     news = response.context['news']
@@ -25,6 +27,7 @@ def test_comment_order(client, news, all_comments):
 
 
 def test_form_anon(client, admin_client, news):
+    """Проверка формы для анонимного пользователя."""
     response = client.get(URL.detail)
     admin_response = admin_client.get(URL.detail)
     assert (
