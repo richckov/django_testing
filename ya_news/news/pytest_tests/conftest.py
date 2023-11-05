@@ -1,4 +1,3 @@
-import pytest
 from collections import namedtuple
 from datetime import datetime, timedelta
 
@@ -6,6 +5,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
 from pytest_lazyfixture import lazy_fixture
+import pytest
 
 from news.models import Comment, News
 
@@ -90,7 +90,7 @@ def all_comments(news, author):
         )
         comment_list.created = timezone.now() + timedelta(days=i)
         comment_list.save()
-        return comment_list
+    return comment_list
 
 
 @pytest.fixture

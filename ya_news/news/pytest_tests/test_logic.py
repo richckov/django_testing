@@ -24,13 +24,9 @@ def test_user_can_create_comment(author_login, author, news, form_text):
     new_comment = Comment.objects.get()
     assertRedirects(response, f'{URL.detail}#comments')
     assert expected_count == comments_count
-    assert all(
-        (
-            new_comment.text == form_text['text'],
-            new_comment.author == author,
-            new_comment.news == news,
-        )
-    )
+    assert new_comment.text == form_text['text']
+    assert new_comment.author == author
+    assert new_comment.news == news
 
 
 @pytest.mark.parametrize('word', BAD_WORDS)
@@ -44,11 +40,10 @@ def test_user_cant_use_bad_words(author_login, news, word):
 
 
 def test_author_delete_comment(author_login, comment):
-    expected_count = Comment.objects.count() - 1
-    response = author_login.delete(URL.delete)
+    response = author_login.post(URL.delete)
     comments_count = Comment.objects.count()
     assertRedirects(response, f'{URL.detail}#comments')
-    assert expected_count == comments_count
+    assert comments_count == 0
 
 
 def test_user_cant_delete_comment_of_another_user(admin_client, comment):
