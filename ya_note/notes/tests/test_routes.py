@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from .all_inf import URL, MainTestCase, AUTHOR, USER, ANON
+from .conftest import URL, MainTestCase, AUTHOR, USER, ANON
 
 
 class TestRoutes(MainTestCase):

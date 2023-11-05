@@ -1,5 +1,5 @@
 from notes.forms import NoteForm
-from .all_inf import URL, MainTestCase
+from .conftest import URL, MainTestCase
 
 
 class TestNoteList(MainTestCase):

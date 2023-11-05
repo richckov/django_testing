@@ -5,7 +5,7 @@ from pytils.translit import slugify
 
 from notes.forms import WARNING
 from notes.models import Note
-from .all_inf import (
+from .conftest import (
     MainTestCase,
     FIELD_DATA,
     FIELD_NAMES,
